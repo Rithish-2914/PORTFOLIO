@@ -7,20 +7,20 @@
     "type": "free",
     "price": 0,
     "category": "Development Tools",
-    "notesUrl": "PASTE_YOUR_GOOGLE_DRIVE_FOLDER_LINK_HERE",
+    "notesUrl": https://drive.google.com/drive/folders/1oHrJDrslCYJWACiDvxWOGDfgB3Vv1YWO?usp=sharing,
     "videos": [
       {
         "id": "day1",
         "title": "Day 1 — Why Devs Need Git",
         "description": "Setup & Concepts. Understand what Git is, why every developer needs it, and get your environment ready with git init.",
-        "embedUrl": "PASTE_DAY1_GOOGLE_DRIVE_EMBED_URL_HERE",
+        "embedUrl": https://drive.google.com/file/d/1JlzuWofprSqBjrRv4XV94h4E6bfSIeAo/preview,
         "order": 1
       },
       {
         "id": "day2",
         "title": "Day 2 — Your First Commits",
         "description": "Track Changes. Learn how to stage and commit changes, understand the commit history, and use git commit like a pro.",
-        "embedUrl": "PASTE_DAY2_GOOGLE_DRIVE_EMBED_URL_HERE",
+        "embedUrl": https://drive.google.com/file/d/1wfGHrUSqIGyZureclo-Y8jg7NhLBKU5N/preview,
         "order": 2
       },
       {
