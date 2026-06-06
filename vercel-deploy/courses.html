@@ -8,6 +8,25 @@
     <link rel="stylesheet" href="/courses.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .notes-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #4285f4, #34a853);
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin: 1rem 0 1.5rem;
+            transition: opacity 0.2s;
+        }
+        .notes-btn:hover { opacity: 0.88; }
+        .gdrive-player { width: 100%; }
+        .gdrive-player iframe { width: 100%; aspect-ratio: 16/9; border-radius: 8px; display: block; }
+    </style>
 </head>
 <body>
     <div class="cursor" id="cursor"></div>
@@ -20,7 +39,6 @@
             </a>
             <div class="nav-fixed-btns">
                 <a href="/courses.html" class="nav-pill-courses active"><i class="fas fa-play-circle"></i> Courses</a>
-                <a href="/admin.html" class="nav-pill-admin"><i class="fas fa-lock"></i> Admin</a>
             </div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="/" class="nav-link">Home</a></li>
@@ -81,9 +99,7 @@
         <div class="cm-backdrop" id="cmBackdrop"></div>
         <div class="cm-panel" id="cmPanel">
             <button class="cm-close" id="cmClose"><i class="fas fa-times"></i></button>
-            <div class="cm-content" id="cmContent">
-                <!-- Loaded dynamically -->
-            </div>
+            <div class="cm-content" id="cmContent"></div>
         </div>
     </div>
 

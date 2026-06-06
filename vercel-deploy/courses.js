@@ -2,13 +2,11 @@
 
 let allCourses = [];
 let currentFilter = 'all';
-let activeVideoId = null;
 
 async function loadCourses() {
     const grid = document.getElementById('coursesGrid');
-    const noMsg = document.getElementById('noCoursesMsg');
     try {
-        const res = await fetch('/api/courses');
+        const res = await fetch('/courses.json');
         allCourses = await res.json();
         renderCourses(allCourses);
     } catch (err) {
@@ -51,7 +49,7 @@ function renderCourses(courses) {
                 <div class="course-meta">
                     <span class="course-videos-count">
                         <i class="fas fa-play-circle"></i>
-                        ${course.videoCount || 0} video${(course.videoCount || 0) !== 1 ? 's' : ''}
+                        ${(course.videos || []).length} video${(course.videos || []).length !== 1 ? 's' : ''}
                     </span>
                     <span class="course-price ${course.type === 'free' ? 'price-free' : 'price-paid'}">
                         ${course.type === 'free' ? 'Free' : '₹' + (course.price || 0)}
@@ -71,24 +69,21 @@ function filterCourses(type) {
     renderCourses(filtered);
 }
 
-async function openCourse(id) {
+function openCourse(id) {
+    const course = allCourses.find(c => c.id === id);
+    if (!course) return;
+
     const modal = document.getElementById('courseModal');
     const content = document.getElementById('cmContent');
     if (!modal || !content) return;
 
-    content.innerHTML = '<div style="text-align:center;padding:4rem 2rem;color:var(--text-secondary)"><i class="fas fa-spinner fa-spin" style="font-size:2rem;color:var(--primary-color)"></i><p style="margin-top:1rem">Loading course...</p></div>';
+    content.innerHTML = renderCourseDetail(course);
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
-    activeVideoId = null;
 
-    try {
-        const res = await fetch('/api/courses/' + id);
-        const course = await res.json();
-        content.innerHTML = renderCourseDetail(course);
-        initVideoItems();
-    } catch (err) {
-        content.innerHTML = '<div style="text-align:center;padding:4rem;color:var(--text-secondary)"><i class="fas fa-exclamation-circle" style="font-size:2rem"></i><p style="margin-top:1rem">Failed to load course.</p></div>';
-    }
+    // Open first video by default
+    const firstVideo = course.videos && course.videos[0];
+    if (firstVideo) toggleVideo(firstVideo.id);
 }
 
 function renderCourseDetail(course) {
@@ -107,6 +102,12 @@ function renderCourseDetail(course) {
         <h2 class="cd-title">${escapeHtml(course.title)}</h2>
         <p class="cd-desc">${escapeHtml(course.description || '')}</p>
 
+        ${course.notesUrl ? `
+            <a href="${course.notesUrl}" target="_blank" rel="noopener" class="notes-btn">
+                <i class="fab fa-google-drive"></i> Access Course Notes & Files
+            </a>
+        ` : ''}
+
         <div class="cd-videos-header">
             <i class="fas fa-play-circle"></i>
             ${videos.length} Video${videos.length !== 1 ? 's' : ''}
@@ -115,7 +116,7 @@ function renderCourseDetail(course) {
         ${videos.length === 0
             ? `<div class="cd-no-videos"><i class="fas fa-video-slash"></i><p>No videos yet in this course.</p></div>`
             : videos.map((v, i) => `
-                <div class="video-item" data-id="${v.id}">
+                <div class="video-item" data-id="${v.id}" data-embed="${escapeHtml(v.embedUrl || '')}">
                     <div class="video-item-header" onclick="toggleVideo('${v.id}')">
                         <div class="vi-number">${i + 1}</div>
                         <div class="vi-info">
@@ -125,24 +126,7 @@ function renderCourseDetail(course) {
                         <div class="vi-play-btn"><i class="fas fa-play"></i></div>
                     </div>
                     <div class="video-player-wrap">
-                        <video controls preload="none" src="${v.videoFile}">
-                            Your browser does not support video playback.
-                        </video>
-                        ${v.attachments && v.attachments.length > 0 ? `
-                            <div class="video-attachments">
-                                <div class="va-title"><i class="fas fa-paperclip"></i> Attachments</div>
-                                <div class="attach-list">
-                                    ${v.attachments.map(a => `
-                                        <a href="${a.path}" download="${escapeHtml(a.name)}" class="attach-item">
-                                            <i class="${getFileIcon(a.name)}"></i>
-                                            <span class="attach-name">${escapeHtml(a.name)}</span>
-                                            <span class="attach-size">${formatSize(a.size)}</span>
-                                            <span class="attach-download"><i class="fas fa-download"></i></span>
-                                        </a>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        ` : ''}
+                        <div class="gdrive-player" id="player-${v.id}"></div>
                     </div>
                 </div>
             `).join('')
@@ -155,32 +139,26 @@ function toggleVideo(id) {
     if (!item) return;
     const isActive = item.classList.contains('active');
 
-    // Close all
+    // Close all open videos (clear iframe to stop playback)
     document.querySelectorAll('.video-item.active').forEach(el => {
         el.classList.remove('active');
-        const v = el.querySelector('video');
-        if (v) { v.pause(); }
+        const player = el.querySelector('.gdrive-player');
+        if (player) player.innerHTML = '';
     });
 
     if (!isActive) {
         item.classList.add('active');
-        const v = item.querySelector('video');
-        if (v) {
-            v.load();
-            setTimeout(() => v.play().catch(() => {}), 100);
+        const embedUrl = item.dataset.embed;
+        const player = item.querySelector('.gdrive-player');
+        if (player && embedUrl) {
+            player.innerHTML = `<iframe
+                src="${embedUrl}"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                frameborder="0"
+                style="width:100%;aspect-ratio:16/9;border-radius:8px;display:block;"
+            ></iframe>`;
         }
-        activeVideoId = id;
-    } else {
-        activeVideoId = null;
-    }
-}
-
-function initVideoItems() {
-    // Open first video by default
-    const first = document.querySelector('.video-item');
-    if (first) {
-        const id = first.dataset.id;
-        if (id) toggleVideo(id);
     }
 }
 
@@ -189,32 +167,9 @@ function closeCourseModal() {
     if (!modal) return;
     modal.classList.remove('open');
     document.body.style.overflow = '';
-    document.querySelectorAll('.video-item video').forEach(v => v.pause());
-    activeVideoId = null;
-}
-
-function getFileIcon(filename) {
-    const ext = filename.split('.').pop().toLowerCase();
-    const icons = {
-        pdf: 'fas fa-file-pdf',
-        doc: 'fas fa-file-word', docx: 'fas fa-file-word',
-        xls: 'fas fa-file-excel', xlsx: 'fas fa-file-excel',
-        ppt: 'fas fa-file-powerpoint', pptx: 'fas fa-file-powerpoint',
-        zip: 'fas fa-file-archive', rar: 'fas fa-file-archive', '7z': 'fas fa-file-archive',
-        mp4: 'fas fa-file-video', mov: 'fas fa-file-video', avi: 'fas fa-file-video',
-        jpg: 'fas fa-file-image', jpeg: 'fas fa-file-image', png: 'fas fa-file-image', gif: 'fas fa-file-image',
-        mp3: 'fas fa-file-audio', wav: 'fas fa-file-audio',
-        js: 'fas fa-file-code', ts: 'fas fa-file-code', html: 'fas fa-file-code', css: 'fas fa-file-code', py: 'fas fa-file-code',
-        txt: 'fas fa-file-alt',
-    };
-    return icons[ext] || 'fas fa-file';
-}
-
-function formatSize(bytes) {
-    if (!bytes) return '';
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    // Clear all iframes to stop playback
+    document.querySelectorAll('.gdrive-player').forEach(p => p.innerHTML = '');
+    document.querySelectorAll('.video-item').forEach(el => el.classList.remove('active'));
 }
 
 function escapeHtml(str) {
@@ -226,18 +181,15 @@ function escapeHtml(str) {
 document.addEventListener('DOMContentLoaded', () => {
     loadCourses();
 
-    // Filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => filterCourses(btn.dataset.filter));
     });
 
-    // Modal close
     const cmClose = document.getElementById('cmClose');
     const cmBackdrop = document.getElementById('cmBackdrop');
     if (cmClose) cmClose.addEventListener('click', closeCourseModal);
     if (cmBackdrop) cmBackdrop.addEventListener('click', closeCourseModal);
 
-    // ESC key
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') closeCourseModal();
     });
