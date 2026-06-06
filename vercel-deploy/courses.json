@@ -1,20 +1,62 @@
 [
   {
-    "id": "example-course",
-    "title": "Example Course",
-    "description": "Edit courses.json to add your real courses. Each video uses a Google Drive embed link.",
-    "thumbnail": "",
+    "id": "git-github-bootcamp",
+    "title": "Git & GitHub Bootcamp",
+    "description": "Go from zero to GitHub Pro in 7 days. Master version control, branching, pull requests, open source collaboration, and more — all with hands-on practice.",
+    "thumbnail": "/thumbnails/day1.jpg",
     "type": "free",
     "price": 0,
-    "category": "General",
-    "notesUrl": "https://drive.google.com/drive/folders/YOUR_FOLDER_ID",
+    "category": "Development Tools",
+    "notesUrl": "PASTE_YOUR_GOOGLE_DRIVE_FOLDER_LINK_HERE",
     "videos": [
       {
-        "id": "v1",
-        "title": "Introduction",
-        "description": "Getting started",
-        "embedUrl": "https://drive.google.com/file/d/YOUR_FILE_ID/preview",
+        "id": "day1",
+        "title": "Day 1 — Why Devs Need Git",
+        "description": "Setup & Concepts. Understand what Git is, why every developer needs it, and get your environment ready with git init.",
+        "embedUrl": "PASTE_DAY1_GOOGLE_DRIVE_EMBED_URL_HERE",
         "order": 1
+      },
+      {
+        "id": "day2",
+        "title": "Day 2 — Your First Commits",
+        "description": "Track Changes. Learn how to stage and commit changes, understand the commit history, and use git commit like a pro.",
+        "embedUrl": "PASTE_DAY2_GOOGLE_DRIVE_EMBED_URL_HERE",
+        "order": 2
+      },
+      {
+        "id": "day3",
+        "title": "Day 3 — Push Your Code Live",
+        "description": "GitHub Upload. Connect your local repo to GitHub and push your code live with git push.",
+        "embedUrl": "PASTE_DAY3_GOOGLE_DRIVE_EMBED_URL_HERE",
+        "order": 3
+      },
+      {
+        "id": "day4",
+        "title": "Day 4 — Branching Like a Pro",
+        "description": "Parallel Work. Create and manage branches to work on features independently using git branch.",
+        "embedUrl": "PASTE_DAY4_GOOGLE_DRIVE_EMBED_URL_HERE",
+        "order": 4
+      },
+      {
+        "id": "day5",
+        "title": "Day 5 — Pull Requests & Open Source",
+        "description": "Team Workflow. Learn how to fork repos, raise pull requests, and contribute to open source projects.",
+        "embedUrl": "PASTE_DAY5_GOOGLE_DRIVE_EMBED_URL_HERE",
+        "order": 5
+      },
+      {
+        "id": "day6",
+        "title": "Day 6 — GitHub Profile",
+        "description": "Portfolio + Pages. Build a standout GitHub profile with a README.md and host your portfolio using GitHub Pages.",
+        "embedUrl": "PASTE_DAY6_GOOGLE_DRIVE_EMBED_URL_HERE",
+        "order": 6
+      },
+      {
+        "id": "day7",
+        "title": "Day 7 — Final Project",
+        "description": "Get Certified. Put everything together in a final project using git merge and complete the bootcamp.",
+        "embedUrl": "PASTE_DAY7_GOOGLE_DRIVE_EMBED_URL_HERE",
+        "order": 7
       }
     ]
   }
