@@ -104,7 +104,11 @@ const router = Router();
 
 router.post("/admin/login", (req, res) => {
   const { password } = req.body;
-  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "rithish@admin";
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+  if (!ADMIN_PASSWORD) {
+    res.status(503).json({ error: "Admin not configured" });
+    return;
+  }
   if (password === ADMIN_PASSWORD) {
     // @ts-ignore
     req.session.isAdmin = true;
