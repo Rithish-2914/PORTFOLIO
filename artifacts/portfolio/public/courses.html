@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses — Bajjuri Rithish</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/courses.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                BAJJURI RITHISH
+            </a>
+            <div class="nav-fixed-btns">
+                <a href="/courses.html" class="nav-pill-courses active"><i class="fas fa-play-circle"></i> Courses</a>
+                <a href="/admin.html" class="nav-pill-admin"><i class="fas fa-lock"></i> Admin</a>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- COURSES HERO -->
+    <section class="courses-hero">
+        <div class="ch-bg"></div>
+        <div class="container">
+            <div class="ch-content">
+                <span class="section-label">Learn from Rithish</span>
+                <h1>Courses & <span class="accent-text">Masterclasses</span></h1>
+                <p>Practical knowledge on AI, Full-Stack Development, Entrepreneurship and more. Learn what actually works.</p>
+                <div class="ch-filters">
+                    <button class="filter-btn active" data-filter="all">All Courses</button>
+                    <button class="filter-btn" data-filter="free">Free</button>
+                    <button class="filter-btn" data-filter="paid">Paid</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COURSES LIST -->
+    <section class="courses-section">
+        <div class="container">
+            <div id="coursesGrid" class="courses-grid">
+                <div class="courses-loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading courses...</p>
+                </div>
+            </div>
+            <div id="noCoursesMsg" class="no-courses" style="display:none">
+                <div class="no-courses-inner">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Courses Coming Soon</h3>
+                    <p>We're preparing amazing content for you. Check back soon!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COURSE MODAL -->
+    <div class="course-modal" id="courseModal">
+        <div class="cm-backdrop" id="cmBackdrop"></div>
+        <div class="cm-panel" id="cmPanel">
+            <button class="cm-close" id="cmClose"><i class="fas fa-times"></i></button>
+            <div class="cm-content" id="cmContent">
+                <!-- Loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <p class="footer-copy">&copy; 2024 Bajjuri Rithish. All rights reserved.</p>
+                <p class="footer-made">Designed & Developed with <i class="fas fa-heart"></i> by Bajjuri Rithish</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/script.js"></script>
+    <script src="/courses.js"></script>
+</body>
+</html>
